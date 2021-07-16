@@ -1,7 +1,7 @@
 
 import { Prefix, Suffix } from './Morph';
 
-/* SE DEBE CORREGIR TODO */
+/* SE DEBE CORREGIR TODAS LAS CLASES */
 
 const join = (ini: string, fin: string) => ini + fin;
 

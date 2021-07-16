@@ -2,8 +2,8 @@
 export default interface IConfig  {
     phonemes: IPhonemesSets;
     orth: IOrths;
-    wordSchemas: IWordSchemas;
-    morphStructures: Set<string>;
+    wordSchemas: IWordLangSets<string>;
+    morphStructures: string[];
 }
 
 /* Arreglos con length minimo*/
@@ -13,19 +13,78 @@ export interface IArray5<T> extends Array<T> {
     0: T; 1: T; 2: T; 3: T; 4: T; 5: T;
 }
 
+export interface IWordLangSets<T> {
+    'Defaults': Set<T>,
+    'PersonNeutralNames': Set<T>,
+    'BoyNames': Set<T>,
+    'GirlNames': Set<T>,
+    'Jobs': Set<T>,
+    'Civilizatitons': Set<T>,
+    'Regions': Set<T>,
+    'FamilyNames': Set<T>,
+    'FamilyNeutralNames'?: Set<T>,
+    'Towns': Set<T>,
+    'Organizations'?: Set<T>,
+}
 
-export interface IWordSchemas {
-    'Defaults': IArray1<string>,
-    'PersonNeutralNames'?: IArray1<string>,
-    'BoyNames': IArray1<string>,
-    'GirlNames': IArray1<string>,
-    'Jobs': IArray1<string>,
-    'Civilizatitons': IArray1<string>,
-    'Regions': IArray1<string>,
-    'FamilyNames': IArray1<string>,
-    'FamilyNeutralNames'?: IArray1<string>,
-    'Towns': IArray1<string>,
-    'Organizations': IArray1<string>,
+export interface IMorphemeLangSets<T> {
+    'defaults': Set<T>,
+    'landOf': Set<T>,
+    'demonym': Set<T>,
+    'jobs': Set<T>,
+    'sonOf': Set<T>,
+    'daughterOf': Set<T>,
+    'bnames': Set<T>,
+    'gnames': Set<T>,
+}
+
+export type schemaCodes = 
+    // wordsSchemasCode-words
+    | 'D'
+    | 'P'
+    | 'B'
+    | 'G'
+    | 'J'
+    | 'C'
+    | 'R'
+    | 'F'
+    | 'N'
+    | 'T'
+    | 'O'
+    
+    // wordsSchemasCode-morphemes
+    | 'd'
+    | 'l'
+    | 'y'
+    | 'j'
+    | 's'
+    | 'o'
+    | 'b'
+    | 'g'
+
+export const schemasCodeMap = {
+    // wordsSchemasCode-words
+    D: 'Defaults',
+    P: 'PersonNeutralNames',
+    B: 'BoyNames',
+    G: 'GirlNames',
+    J: 'Jobs',
+    C: 'Civilizatitons',
+    R: 'Regions',
+    F: 'FamilyNames',
+    N: 'FamilyNeutralNames',
+    T: 'Towns',
+    O: 'Organizations',
+    
+    // wordsSchemasCode-morphemes
+    d: 'defaults',
+    l: 'landOf', // tierra de, pueblo de,
+    y: 'demonym', // gentilicio
+    j: 'jobs', // oficio
+    s: 'sonOf',
+    o: 'daughterOf',
+    b: 'bnames',
+    g: 'gnames',
 }
 
 export interface IOrths {

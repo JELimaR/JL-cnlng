@@ -1,7 +1,7 @@
 import Morph  from "./Morph";
 import {SimpleWord} from "./Word";
-import IConfig from './config/Interfaces';
-import { defaultConfig, wordsSchemasCode } from './config/ConfigConstants';
+import IConfig, { schemaCodes, schemasCodeMap } from './config/Interfaces';
+import { defaultConfig } from './config/ConfigConstants';
 import globalSets from "./config/PhonemeSetConstants";
 
 class Lang {
@@ -25,8 +25,16 @@ class Lang {
     get name(): string { return this._name; }
     set name(value: string) { this._name = value;}
     get config(): IConfig { return this._config; }
+    get words(): any { return this._words; }
+    get morphs(): any { return this._morphs; }
 
     derivate(): Lang { return this} // TODO: derivationRules
+
+    getSpelledWord(code: schemaCodes): string { 
+        if (code.toUpperCase() === code) {
+            return schemasCodeMap[code]
+        } else return '';
+    }
 }
 
 export default Lang;

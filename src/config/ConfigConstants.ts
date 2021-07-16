@@ -1,11 +1,12 @@
-import IConfig, { IWordSchemas, IArray1 } from './Interfaces';
+import IConfig, { IWordLangSets } from './Interfaces';
 import OrthConstants from './OrthConstants';
 import { defaultPhonemeSets } from './PhonemeSetConstants';
 
-const schemaMake: IArray1<string> = ['M'];
+const schemaMake = new Set<string>(['M']);
 
-export const wordSchemasBasic: IWordSchemas = {
+export const wordSchemasBasic: IWordLangSets<string> = {
     'Defaults': schemaMake,
+    'PersonNeutralNames': schemaMake,
     'BoyNames': schemaMake,
     'GirlNames': schemaMake,
     'Jobs': schemaMake,
@@ -20,32 +21,7 @@ export const defaultConfig: IConfig = {
     phonemes: defaultPhonemeSets,
     orth: OrthConstants.Orths.default,
     wordSchemas: wordSchemasBasic,
-    morphStructures: new Set<string>(['CVC']),
-}
-
-export const wordsSchemasCode = {
-    // wordsSchemasCode-words
-    D: 'Defaults',
-    P: 'PersonNeutralNames',
-    B: 'BoyNames',
-    G: 'GirlNames',
-    J: 'Jobs',
-    C: 'Civilizatitons',
-    R: 'Regions',
-    F: 'FamilyNames',
-    N: 'FamilyNeutralNames',
-    T: 'Towns',
-    O: 'Organizations',
-    
-    // wordsSchemasCode-morphemes
-    d: 'defaults',
-    l: 'landOf', // tierra de, pueblo de,
-    y: 'demonym', // gentilicio
-    j: 'jobs', // oficio
-    s: 'sonOf',
-    o: 'daughterOf',
-    b: 'bnames',
-    g: 'gnames',
+    morphStructures: ['CVC'],
 }
 
 // opciones generales - puede ser otra opcion

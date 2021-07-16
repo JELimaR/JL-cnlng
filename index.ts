@@ -11,7 +11,7 @@ const config: IConfig = {
     },
     orth: defaultConfig.orth, 
     wordSchemas: defaultConfig.wordSchemas,
-    morphStructures: new Set<string>(['CVC', 'C?VC'])
+    morphStructures: ['CVC', 'C?VC']
 }
 
 const l1 =  new Lang();
@@ -24,4 +24,6 @@ console.log('-------------------------------------\n' + l1.name + ':');
 console.log(l1.config);
 console.log('-------------------------------------\n' + l2.name + ':');
 console.log(l2.config);
+
+
 
