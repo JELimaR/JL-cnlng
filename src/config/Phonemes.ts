@@ -1,14 +1,46 @@
-import { IPhonemesSets, IArray2, IArray5 } from './Interfaces';
+export interface IPhonemesSets {
+    cons: string[];
+    vows: string[];
+    ls?: string[];
+    ds?: string[];
+    ss?: string[];
+    fs?: string[];
+}
+
+export type PhonemeType = 
+    | 'V'
+    | 'C'
+    | 'S'
+    | 'L'
+    | 'D'
+    | 'F'
+
+export type PhonemeTypeExtended = 
+    | PhonemeType
+    | 'G'
+    | 'H'
+    | 'X'
+    | 'Y'
+    | 'Z'
+    | '?'
+    | '*'
+
+export const str2phoneme = (s: string): PhonemeTypeExtended => {
+    if (s === 'V' || s === 'C' || s === 'S' || s === 'L' || s === 'D' || s === 'F' ||
+        s === 'G' || s === 'H' || s === 'X' || s === 'Y' || s === 'Z' || s === '?')
+        return s;
+    else return '*'
+}
 
 /* consontant sets */
-const consMinimal: IArray5<string> = ['p','t','k','m','n','l','s'];
-const consEnglishIsh: IArray5<string> = ['p','t','k','b','v','d','g','m','n','l','r','s','ʃ','z','ʒ','ʧ'];
-const consPiraha: IArray5<string> = ['p','t','k','m','n','h'];
-const consHawaiianIsh: IArray5<string> = ['h','k','l','m','n','p','w'];
-const consGreenlandicIsh: IArray5<string> = ['p','t','k','q','s','g','r','m','n','ŋ','l','j'];
-const consArabicIsh: IArray5<string> = ['t','k','s','ʃ','d','b','q','ɣ','x','m','n','l','r','w','j'];
-const consArabicLite: IArray5<string> = ['t','k','d','g','m','n','s','ʃ'];
-const consEnglishLite: IArray5<string> = ['p','t','k','b','d','g','m','n','v','s','z','ʒ','ʧ','h','j','w'];
+const consMinimal: string[] = ['p','t','k','m','n','l','s'];
+const consEnglishIsh: string[] = ['p','t','k','b','v','d','g','m','n','l','r','s','ʃ','z','ʒ','ʧ'];
+const consPiraha: string[] = ['p','t','k','m','n','h'];
+const consHawaiianIsh: string[] = ['h','k','l','m','n','p','w'];
+const consGreenlandicIsh: string[] = ['p','t','k','q','s','g','r','m','n','ŋ','l','j'];
+const consArabicIsh: string[] = ['t','k','s','ʃ','d','b','q','ɣ','x','m','n','l','r','w','j'];
+const consArabicLite: string[] = ['t','k','d','g','m','n','s','ʃ'];
+const consEnglishLite: string[] = ['p','t','k','b','d','g','m','n','v','s','z','ʒ','ʧ','h','j','w'];
 
 export const conssets = {
     'Minimal': consMinimal,
@@ -79,13 +111,13 @@ export const fsets = {
     'm n': fsMN,
 }
 
-const vowStandard5: IArray2<string> = ['a','e','i','o','u'];
-const vow3VowelAIU: IArray2<string> = ['a','i','u'];
-const vowExtraAEI: IArray2<string> = ['a','e','i','o','u','A','E','I'];
-const vowExtraU: IArray2<string> = ['a','e','i','o','u', 'U'];
-const vow5VowelAIUAI: IArray2<string> = ['a','i','u','A','I'];
-const vow3VowelEOU: IArray2<string> = ['e','o','u'];
-const vowExtraAOU: IArray2<string> = ['a','e','i','o','u','A','O','U'];
+const vowStandard5: string[] = ['a','e','i','o','u'];
+const vow3VowelAIU: string[] = ['a','i','u'];
+const vowExtraAEI: string[] = ['a','e','i','o','u','A','E','I'];
+const vowExtraU: string[] = ['a','e','i','o','u', 'U'];
+const vow5VowelAIUAI: string[] = ['a','i','u','A','I'];
+const vow3VowelEOU: string[] = ['e','o','u'];
+const vowExtraAOU: string[] = ['a','e','i','o','u','A','O','U'];
 
 export const vowssets = {
     'Standard 5': vowStandard5,

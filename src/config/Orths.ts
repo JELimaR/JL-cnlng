@@ -1,4 +1,27 @@
-import { ICorth, IOrths, IVorth } from './Interfaces';
+
+export interface IOrths {
+    corth: ICorth;
+    vorth: IVorth;
+}
+
+export interface ICorth {
+    'ʃ'?: string;
+    'ʒ'?: string;
+    'ʧ'?: string;
+    'ʤ'?: string;
+    'ŋ'?: string;
+    'j'?: string;
+    'x'?: string;
+    'ɣ'?: string;
+}
+
+export interface IVorth  {
+    'A'?: string;
+    'E'?: string;
+    'I'?: string;
+    'O'?: string;
+    'U'?: string;
+}
 
 /* Consonants ortho rules */
 const defaultConsOrth: ICorth = {

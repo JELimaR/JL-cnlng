@@ -1,0 +1,52 @@
+V
+VC
+VD
+VF
+
+CV
+CVC
+CVD
+CVF
+
+LV
+LVC
+LVD
+LVF
+
+SV
+SVC
+SVD
+SVF
+
+VV
+VVC
+VVD
+VVF
+
+CVV
+CVVC
+CVVD
+CVVF
+
+LVV
+LVVC
+LVVD
+LVVF
+
+SVV
+SVVC
+SVVD
+SVVF
+
+CoL = X
+CoLoS = Y
+CoS = Z
+CoD = G
+CoDoF = H
+
+ini
+_, C, S, X, Y
+mid
+V, VV, VV? 
+fin
+_, C, F, G, H

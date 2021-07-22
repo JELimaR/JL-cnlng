@@ -1,8 +1,8 @@
 {
-  "name": "conlang",
+  "name": "jl-cnlng",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev:tsc": "tsc --watch",
     "dev:nodemon": "nodemon ./dist/index.js",

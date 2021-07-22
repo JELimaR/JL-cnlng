@@ -1,6 +1,8 @@
-import IConfig, { IWordLangSets } from './Interfaces';
-import OrthConstants from './OrthConstants';
-import { defaultPhonemeSets } from './PhonemeSetConstants';
+
+import { IWordLangSets } from './LangSchemaCode';
+import { IConfig } from './LangConfig';
+import OrthConstants from './Orths';
+import { defaultPhonemeSets } from './Phonemes';
 
 const schemaMake = new Set<string>(['M']);
 
@@ -13,6 +15,7 @@ export const wordSchemasBasic: IWordLangSets<string> = {
     'Civilizatitons': schemaMake,
     'Regions': schemaMake,
     'FamilyNames': schemaMake,
+    'FamilyNeutralNames': schemaMake,
     'Towns': schemaMake,
     'Organizations': schemaMake,
 }
@@ -22,14 +25,16 @@ export const defaultConfig: IConfig = {
     orth: OrthConstants.Orths.default,
     wordSchemas: wordSchemasBasic,
     morphStructures: ['CVC'],
+    wordStructures: ['CVC', 'CVCVC', 'CVCVCVC'],
+    exponent: 2,
 }
 
 // opciones generales - puede ser otra opcion
 const INI = ['', 'C', 'S', 'X', 'Y'];
 const FIN = ['', 'C', 'F', 'G', 'H'];
 
-const MID1 = ['V', 'VV', 'V?'];
-const MID2 = ['XV'];
+const MID1 = ['V', 'VV', 'VV?'];
+const MID2 = ['XV', 'XVV?'];
 const MID3 = ['XVH?X?V'];
 
 const commonStructs = [
