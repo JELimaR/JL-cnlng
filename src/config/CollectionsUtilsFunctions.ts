@@ -42,6 +42,4 @@ export default class CollectionsUtilsFunctions {
         return Math.floor(Math.random() * (hi - lo)) + lo;
     }
 
-
-
 }

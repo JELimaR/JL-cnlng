@@ -23,6 +23,10 @@ export interface IVorth  {
     'U'?: string;
 }
 
+export type CorthKey = keyof ICorth;
+
+export type VorthKey = keyof IVorth;
+
 /* Consonants ortho rules */
 const defaultConsOrth: ICorth = {
     'ʃ': 'sh',
@@ -66,7 +70,7 @@ const chineseConsOrth: ICorth = {
     'ʤ': 'j', 
 }
 
-const CorthsList = {
+export const CorthsList = {
     'default': defaultConsOrth,
     'slavic': slavicConsOrth,
     'german': germanConsOrth,
@@ -125,7 +129,7 @@ const nodrdicsVowsOrth: IVorth = {
     'U': 'ü'
 }
 
-const VorthsList = {
+export const VorthsList = {
     'default': defaultVowsOrth,
     'acutes': acutesVowsOrth,
     'umlsuts': umlsutsVowsOrth,
@@ -141,12 +145,6 @@ const defaultOrths: IOrths = {
     vorth: defaultVowsOrth
 }
 
-const OrthsList = {
+export const OrthsList = {
     'default': defaultOrths
-}
-
-export default {
-    Orths: OrthsList,
-    Corths: CorthsList,
-    Vorths: VorthsList
 }

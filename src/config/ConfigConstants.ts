@@ -1,10 +1,11 @@
 
 import { IWordLangSets } from './LangSchemaCode';
 import { IConfig } from './LangConfig';
-import OrthConstants from './Orths';
-import { defaultPhonemeSets } from './Phonemes';
 
-const schemaMake = new Set<string>(['M']);
+import { defaultPhonemeSets } from './Phonemes';
+import { OrthsList } from './Orths';
+
+const schemaMake = ['M'];
 
 export const wordSchemasBasic: IWordLangSets<string> = {
     'Defaults': schemaMake,
@@ -22,8 +23,9 @@ export const wordSchemasBasic: IWordLangSets<string> = {
 
 export const defaultConfig: IConfig = {
     phonemes: defaultPhonemeSets,
-    orth: OrthConstants.Orths.default,
+    orth: OrthsList.default,
     wordSchemas: wordSchemasBasic,
+    specialStructures: ['VC', 'C?VC'],
     morphStructures: ['CVC'],
     wordStructures: ['CVC', 'CVCVC', 'CVCVCVC'],
     exponent: 2,

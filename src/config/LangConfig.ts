@@ -9,27 +9,29 @@ export interface IConfig {
     phonemes: IPhonemesSets;
     orth: IOrths;
     wordSchemas: IWordLangSets<string>;
+    specialStructures: string[];
     morphStructures: string[];
     wordStructures: string[];
     exponent: number
 }
 
-export default class LangConfig /*implements IConfig*/ {
+export default class LangConfig implements IConfig {
     private _phonemes: IPhonemesSets;
     private _orth: IOrths;
     private _wordSchemas: IWordLangSets<string> = {
-        'Defaults': new Set<string>(),
-        'PersonNeutralNames': new Set<string>(),
-        'BoyNames': new Set<string>(),
-        'GirlNames': new Set<string>(),
-        'Jobs': new Set<string>(),
-        'Civilizatitons': new Set<string>(),
-        'Regions': new Set<string>(),
-        'FamilyNames': new Set<string>(),
-        'FamilyNeutralNames': new Set<string>(),
-        'Towns': new Set<string>(),
-        'Organizations': new Set<string>(),
+        'Defaults': [],
+        'PersonNeutralNames': [],
+        'BoyNames': [],
+        'GirlNames': [],
+        'Jobs': [],
+        'Civilizatitons': [],
+        'Regions': [],
+        'FamilyNames': [],
+        'FamilyNeutralNames': [],
+        'Towns': [],
+        'Organizations': [],
     };
+    private _specialStructures: string[];
     private _morphStructures: string[];
     private _wordStructures: string[];
     private _exponent: number;
@@ -54,9 +56,10 @@ export default class LangConfig /*implements IConfig*/ {
                         throw new Error(`Invalid schema code provided: ${l}`)
                     }
                 }
-                this._wordSchemas[k as WordKey].add( v )
+                this._wordSchemas[k as WordKey].push( v )
             })
         }
+        this._specialStructures = config.specialStructures;
         this._morphStructures = config.morphStructures;
         this._wordStructures = config.wordStructures;
         this._exponent = config.exponent;
@@ -65,6 +68,7 @@ export default class LangConfig /*implements IConfig*/ {
     get phonemes(): IPhonemesSets {return this._phonemes}
     get orth(): IOrths {return this._orth}
     get wordSchemas(): IWordLangSets<string> {return this._wordSchemas}
+    get specialStructures(): string[] {return this._specialStructures}
     get morphStructures(): string[] {return this._morphStructures}
     get wordStructures(): string[] {return this._wordStructures}
     get exponent(): number {return this._exponent}
@@ -72,28 +76,27 @@ export default class LangConfig /*implements IConfig*/ {
     get IConfig(): IConfig {
 
         let wordSchemasOut: IWordLangSets<string> = {
-            'Defaults': new Set<string>(),
-            'PersonNeutralNames': new Set<string>(),
-            'BoyNames': new Set<string>(),
-            'GirlNames': new Set<string>(),
-            'Jobs': new Set<string>(),
-            'Civilizatitons': new Set<string>(),
-            'Regions': new Set<string>(),
-            'FamilyNames': new Set<string>(),
-            'FamilyNeutralNames': new Set<string>(),
-            'Towns': new Set<string>(),
-            'Organizations': new Set<string>(),
+            'Defaults': [],
+            'PersonNeutralNames': [],
+            'BoyNames': [],
+            'GirlNames': [],
+            'Jobs': [],
+            'Civilizatitons': [],
+            'Regions': [],
+            'FamilyNames': [],
+            'FamilyNeutralNames': [],
+            'Towns': [],
+            'Organizations': [],
         };
         for (let k in this.wordSchemas) {
-            this.wordSchemas[k as WordKey].forEach((v) => {
-                wordSchemasOut[k as WordKey].add( v )
-            })
+            wordSchemasOut[k as WordKey] = [...this.wordSchemas[k as WordKey]];
         }
 
         return {
             phonemes: this.phonemes,
             orth: this.orth,
             wordSchemas: wordSchemasOut,
+            specialStructures: this.specialStructures,
             morphStructures: this.morphStructures,
             wordStructures: this.wordStructures,
             exponent: this._exponent

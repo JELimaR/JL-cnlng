@@ -1,8 +1,11 @@
-import Lang from './src/Lang';
+import Lang, { ILang } from './src/Lang';
 import { defaultConfig } from './src/config/ConfigConstants';
-import { conssets, defaultPhonemeSets, vowssets } from './src/config/Phonemes';
+import { conssets, defaultPhonemeSets, ssets, vowssets } from './src/config/Phonemes';
 import CollectionsUtilsFunctions from './src/config/CollectionsUtilsFunctions';
 import { IConfig } from './src/config/LangConfig';
+import LangTransform from './src/Transform/LangTransform';
+import { ChangeRule } from './src/Transform/LangTransformRule'
+import { CorthsList, VorthsList } from './src/config/Orths';
 
 const CUF = CollectionsUtilsFunctions.getInstance();
 
@@ -12,31 +15,68 @@ let config: IConfig = {
         ...defaultPhonemeSets,
         cons: conssets['ArabicLite'],
         vows: CUF.shuffled( vowssets['3 Vowel e o u'] )
-    }, 
-    wordSchemas: {...defaultConfig.wordSchemas, 'BoyNames': new Set(['D-D', 'D'])},
-    morphStructures: ['CVC', 'C?VC'],
-    wordStructures: ['CVV?F', 'CVVLVV?F']
+    },
+    wordSchemas: {...defaultConfig.wordSchemas, 'PersonNeutralNames': ['m', 'mm']},
+    morphStructures: ['CVC', 'V?VC'],
+    wordStructures: ['C?VV?F', 'CVVCLVF']
 }
 
-const l1 =  new Lang( );
+const l1 =  new Lang( config );
 l1.name = 'Lang 1';
 
-const l2 = new Lang( config );
-l2.name = 'Lang 2';
+for (let i = 0; i<21; i++) {
+    // l1.newMorph('d');
+    // l1.newMorph('l');
+    
 
-for (let i = 0; i<1; i++) {
-    l1.newWord('B')
-    l2.newWord('B')
+    l1.newWord('D');
+    // l1.newWord('P');
 }
 
-console.log('-------------------------------------\n' + l2.name + ':');
+// console.log(l1.words['PersonNeutralNames'])
 
-let l3: Lang;
-l3 = l2.influence( l1 );
+// let w: string = CUF.choose( l1.words['PersonNeutralNames'] );
 
-console.log( l2.words )
-l3.name = 'Lang 3';
-console.log('-------------------------------------\n' + l3.name + ':');
-console.log( l3.words );
+// const wf = l1.getPersonNameGenred('f', w);
+// const wm = l1.getPersonNameGenred('m', w);
 
+// console.log( wf )
+// console.log( wm )
 
+let l1json: ILang = JSON.parse(JSON.stringify(l1));
+
+let rules: ChangeRule[] = [
+    // new ChangeRule('V', 'E', {pre: [''], post: ['']}),
+    new ChangeRule('C', '%', {pre: ['.{3}','o'], post: ['$']}),
+    new ChangeRule('o%', 'O', {pre: [''], post: ['']}),
+];
+let configChange: IConfig = {
+    'exponent': 2,
+    'orth': { 'corth': CorthsList.slavic, 'vorth': VorthsList.nordics },
+    'phonemes': {
+        'cons': conssets['ArabicLite'],
+        'vows': vowssets['Extra A E I'],
+        'ss': ssets['S SH']
+    },
+    'wordSchemas': {...l1.config.wordSchemas},
+    'specialStructures': ['V', 'CV'],
+    'morphStructures': ['CVC', 'SVC?'],
+    'wordStructures': ['ZVC', 'ZVV?CCVC']
+}
+try {
+    
+    let der: Lang = LangTransform.instance.derivate( l1, rules, configChange );
+    
+    for (let i = 0; i<6; i++) {
+        l1.newWord('D');
+        der.newWord('D');
+    }
+    console.log( l1.words['Defaults'].map(wd => l1.getSpelledWord(wd))) ;
+    console.log( der.words['Defaults'].map(wd => l1.getSpelledWord(wd)) );
+    for (let i of rules) {
+        console.log( i.condition.toString() )
+    }
+    der.specials = {...l1.specials}
+} catch (e) {
+    console.error(e)
+}

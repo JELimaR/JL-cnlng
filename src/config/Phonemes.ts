@@ -68,12 +68,12 @@ export const ssets = {
 }
 
 /* liquids sets - begin of morphemes */
-const lsComplete: string[] = ['br', 'kr', 'dr', 'fr', 'ɣr', 'xr', 'pr', 'tr', 'ʃr', 'bl', 'kl', 'fl', 'ɣl', 'pl', 'ʃl'];
-const lsJustR: string[] = ['br', 'kr', 'dr', 'fr', 'ɣr', 'xr', 'pr', 'tr'];
-const lsJustL: string[] = ['bl', 'kl', 'fl', 'ɣl', 'pl', 'ʃl'];
-const lsJustW: string[] = ['kw', 'dw', 'ɣw', 'xw', 'tw', 'ʃw'];
+const lsComplete: string[] = ['br', 'kr', 'dr', 'fr', 'gr', 'xr', 'pr', 'tr', 'ʃr', 'bl', 'kl', 'fl', 'gl', 'pl', 'ʃl'];
+const lsJustR: string[] = ['br', 'kr', 'dr', 'fr', 'gr', 'xr', 'pr', 'tr'];
+const lsJustL: string[] = ['bl', 'kl', 'fl', 'gl', 'pl', 'ʃl'];
+const lsJustW: string[] = ['kw', 'dw', 'gw', 'xw', 'tw', 'ʃw'];
 const lsJustJ: string[] = ['kj', 'dj', 'tj', 'bj'];
-const lsSpecial1: string[] = ['br', 'kr', 'dr', 'fr', 'ɣr', 'pr', 'tr', 'bl', 'fl', 'ɣl', 'pl'];
+const lsSpecial1: string[] = ['br', 'kr', 'dr', 'fr', 'gr', 'pr', 'tr', 'bl', 'fl', 'gl', 'pl'];
 
 export const lsets = {
     'none': [],
@@ -135,8 +135,13 @@ export const defaultPhonemeSets: IPhonemesSets = {
 };
 
 const globalSets = {
-    consonants: 'bcdfghjklmnpqrstvwxyzʃʒʧʤŋɣ',
-    vowals: 'aeiouAEIOU'
+    consonants: ['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z','ʃ','ʒ','ʧ','ʤ','ŋ','ɣ'],
+    vowals: ['a','e','i','o','u','A','E','I','O','U'],
+    oclusives: ['p','b','t','d','k','g','ɣ','v'],
+    liquids: ['l','r','w','j','ʤ'],
+    fricatives: ['f','z','s','x','ʒ','h'],
+    africatives: ['ʃ','ʒ','ʧ'],
+    nasals: ['m','n','ŋ']
 } 
 
 export default globalSets;

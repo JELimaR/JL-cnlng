@@ -33,28 +33,28 @@ export const isSchemaCodeExtended = (s: string): boolean => {
 }
 
 export interface IWordLangSets<T> {
-    'Defaults': Set<T>;
-    'PersonNeutralNames': Set<T>;
-    'BoyNames': Set<T>;
-    'GirlNames': Set<T>;
-    'Jobs': Set<T>;
-    'Civilizatitons': Set<T>;
-    'Regions': Set<T>;
-    'FamilyNames': Set<T>;
-    'FamilyNeutralNames': Set<T>;
-    'Towns': Set<T>;
-    'Organizations': Set<T>;
+    'Defaults': T[]
+    'PersonNeutralNames': T[]
+    'BoyNames': T[]
+    'GirlNames': T[]
+    'Jobs': T[]
+    'Civilizatitons': T[]
+    'Regions': T[]
+    'FamilyNames': T[]
+    'FamilyNeutralNames': T[]
+    'Towns': T[]
+    'Organizations': T[]
 }
 
 export interface IMorphemeLangSets<T> {
-    'defaults': Set<T>;
-    'landOf': Set<T>;
-    'demonym': Set<T>;
-    'jobs': Set<T>;
-    'sonOf': Set<T>;
-    'daughterOf': Set<T>;
-    'bnames': Set<T>;
-    'gnames': Set<T>;
+    'defaults': T[]
+    'landOf': T[]
+    'demonym': T[]
+    'jobs': T[]
+    'sonOf': T[]
+    'daughterOf': T[]
+    'bnames': T[]
+    'gnames': T[]
 }
 
 export interface ISpecialMorphemes<T> {
@@ -69,19 +69,22 @@ export type WordKey = keyof IWordLangSets<string>
 
 export type MorphKey = keyof IMorphemeLangSets<string>
 
-export type WordSchemaCode = 
-    // wordsSchemasCode-words
+export type PersonNameCode = 'B' | 'G' | 'P'
+export type FamilyNameCode = 'F' | 'N'
+
+export type OtherNameCode = 
     | 'D'
-    | 'P'
-    | 'B'
-    | 'G'
     | 'J'
     | 'C'
     | 'R'
-    | 'F'
-    | 'N'
     | 'T'
     | 'O'
+
+export type WordSchemaCode = 
+    | PersonNameCode
+    | FamilyNameCode
+    | OtherNameCode
+    
 
 export type MorphSchemaCode = 
     // wordsSchemasCode-morphemes
@@ -115,6 +118,7 @@ export const wordSchemasCodeMap = (code: WordSchemaCode): WordKey => {
         case 'O': return 'Organizations'
     }
 }
+
 export const morphSchemasCodeMap = (code: MorphSchemaCode): MorphKey => {
     // wordsSchemasCode-morphemes
     switch (code) {
