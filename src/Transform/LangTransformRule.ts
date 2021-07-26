@@ -53,23 +53,21 @@ export class ChangeRule {
         const post = `(${this.translate( condition.post )})`;
 
         this.condition = new RegExp( `${pre}${ obj }${post}` );
-        console.log( this.condition.toString() )
+        
     }
 
     apply( s: string ): string {
         let out: string = s;
         let e = this.condition.exec( out );
-        console.log('----------------------------------------------')
-        console.log(out)
-        console.log(e)
+
         let count: number = 0;
         while (e) {
             count++;
             const aux = s;
             out = out.replace( this.condition, `${e[1]}${this.new}${e[2]}` );
-            console.log( `\t${aux} - ${out}` )
+            
             e = this.condition.exec( out );
-            console.log(e)
+            
             if ( count > 100 ) {
                 throw new Error(`La regla de busqueda construida: ${this.condition}
                     no termina para la palabra: ${s} cuando se inserta: ${this.new}.
@@ -84,7 +82,7 @@ export class ChangeRule {
     private translate = ( c: string[]): string => {
         let out: string = '';
         for (let l of c) {
-            console.log(l)
+            
             let none: string = '', letter = l, elements = '';
             if ( l.includes('/') ) {
                 const parts = l.split('/');
@@ -114,14 +112,13 @@ export class ChangeRule {
                     break;
 
 				case '%':
-					out += `[${elements}]`
+					out += `[(${elements})]`
 					break;
                 default:
                     out += l;
                     break;
             }
         }
-        console.log(out)
         return out;
     }
 }

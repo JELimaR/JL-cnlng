@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "nodemonConfig": {
+    "ignore": ["./dist/langData/*.json"]
+  },
   "scripts": {
     "dev:tsc": "tsc --watch",
-    "dev:nodemon": "nodemon ./dist/index.js",
+    "dev:nodemon": "nodemon ./dist/index.js ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "JELimaR",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^16.4.3",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "@typescript-eslint/parser": "^4.28.3",
     "eslint": "^7.30.0",

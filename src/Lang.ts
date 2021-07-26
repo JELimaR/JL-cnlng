@@ -1,4 +1,7 @@
 
+import fs from 'fs';
+import path from 'path';
+
 import { defaultConfig } from './config/ConfigConstants';
 import LangConfig, { IConfig } from './config/LangConfig';
 import {
@@ -104,14 +107,13 @@ export default class Lang implements ILang {
     get level(): number { return this._level; }
     get name(): string { return this._name; }
     set name(value: string) { this._name = value; }
+	get ILang(): ILang { return JSON.parse(JSON.stringify( this )); }
     get config(): IConfig { return this._config.IConfig; }
-    get words(): IWordLangSets<string> {
-        return this.copy()._words;
-    }
+    get words(): IWordLangSets<string> { return this.copy()._words; }
     set words(ws: IWordLangSets<string>){ this._words = ws}
-    get morphs(): IMorphemeLangSets<string> { return this._morphs; }
+    get morphs(): IMorphemeLangSets<string> { return this.copy()._morphs; }
     set morphs(ms: IMorphemeLangSets<string>){ this._morphs = ms}
-    get specials(): ISpecialMorphemes<string> { return this._specials }
+    get specials(): ISpecialMorphemes<string> { return this.copy()._specials }
     set specials(ss: ISpecialMorphemes<string>) { this._specials = ss }
 
     copy(): Lang { // TODO: crear copia de los conjuntos 
@@ -127,6 +129,13 @@ export default class Lang implements ILang {
         out._specials = JSON.parse(JSON.stringify(this._specials));
         return out;
     }
+
+	saveSync(): void {
+		const folderPath: string = __dirname + `/langData`;
+		let filePath: string = path.join(folderPath, `/${this._id}.json`); // path no es necesario realmetne
+		fs.mkdirSync( folderPath, { recursive: true} );
+		fs.writeFileSync(filePath, JSON.stringify( this ));
+	}
 
     private make(struct: string): string { // se puede cambiar tipo
         let out: string = '';
