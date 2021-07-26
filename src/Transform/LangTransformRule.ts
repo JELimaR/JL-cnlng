@@ -32,6 +32,7 @@ export class ChangeRule {
     value: string;
     new: string;
     condition: RegExp;
+
     constructor(v: string, n: string, condition: ICondition) {
 
         if ( v === n ) {
@@ -84,12 +85,16 @@ export class ChangeRule {
         let out: string = '';
         for (let l of c) {
             console.log(l)
-            let none: string = '', letter = l;
+            let none: string = '', letter = l, elements = '';
             if ( l.includes('/') ) {
                 const parts = l.split('/');
                 letter = parts[0];
                 none = parts[1];
             }
+			if ( l.includes('%') ) {
+				letter = '%';
+				elements = l.slice(1,l.length-1);
+			}
     
             switch (letter) {
                 case '^':
@@ -107,6 +112,10 @@ export class ChangeRule {
                     s = s.filter( (e) => e !== this.new) // no debe buscarse el valor que se va a agregar
                     out += `[(${s.join('|')})]`
                     break;
+
+				case '%':
+					out += `[${elements}]`
+					break;
                 default:
                     out += l;
                     break;

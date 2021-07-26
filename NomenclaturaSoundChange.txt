@@ -1,5 +1,13 @@
-X > Y / # 
 
-entradas: []
-salidas: []
-condiciones: 
+conjuntos: V, C o %tkp%
+
+final: $
+inicio: ^
+
+
+value: representa el valor buscado
+new: representa el nuevo valor 
+condiciones:
+	pre: antes del valor buscado
+	post: luego del valor buscado
+
