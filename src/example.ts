@@ -83,5 +83,10 @@ export default function() {
 	}
 
 	l1.saveSync()
+	let langload = Lang.loadSync( 0 );
+	console.log( l1 )
+	console.log('---------')
+	console.log( langload )
+	
 
 }

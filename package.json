@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
-  "nodemonConfig": {
-    "ignore": ["./dist/langData/*.json"]
-  },
   "scripts": {
     "dev:tsc": "tsc --watch",
     "dev:nodemon": "nodemon ./dist/index.js ",

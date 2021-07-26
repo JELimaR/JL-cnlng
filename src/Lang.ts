@@ -38,6 +38,7 @@ export interface ILang {
 export default class Lang implements ILang {
 
     private static _currentId: number = 0;
+	private static folderPath: string = path.join(__dirname, `/langData`);
 
     private _level: number;
     private _id: number;
@@ -71,6 +72,7 @@ export default class Lang implements ILang {
     private _config: LangConfig;
 
     constructor(config: IConfig = defaultConfig, level: number = 0) {
+
         this._id = Lang._currentId++;
         
         this._config = new LangConfig(config);
@@ -107,7 +109,17 @@ export default class Lang implements ILang {
     get level(): number { return this._level; }
     get name(): string { return this._name; }
     set name(value: string) { this._name = value; }
-	get ILang(): ILang { return JSON.parse(JSON.stringify( this )); }
+	get ILang(): ILang { 
+		return {
+			id: this._id,
+			level: this._level,
+			name: this._name,
+			config: this._config.IConfig,
+			words: this.words,
+			morphs: this.morphs,
+			specials: this.specials
+		}; 
+	}
     get config(): IConfig { return this._config.IConfig; }
     get words(): IWordLangSets<string> { return this.copy()._words; }
     set words(ws: IWordLangSets<string>){ this._words = ws}
@@ -131,15 +143,35 @@ export default class Lang implements ILang {
     }
 
 	saveSync(): void {
-		const folderPath: string = __dirname + `/langData`;
-		let filePath: string = path.join(folderPath, `/${this._id}.json`); // path no es necesario realmetne
-		fs.mkdirSync( folderPath, { recursive: true} );
-		fs.writeFileSync(filePath, JSON.stringify( this ));
+		let filePath: string = path.join(Lang.folderPath, `/${this._id}.langjson`); // path no es necesario realmetne
+		fs.mkdirSync( Lang.folderPath, { recursive: true} );
+		fs.writeFileSync(filePath, JSON.stringify( this.ILang ));
+	}
+
+	static loadSync(id: number): Lang {
+		let filePath: string = path.join(Lang.folderPath, `/${id}.langjson`);
+		const lr = JSON.parse( fs.readFileSync( filePath, {encoding:'utf8', flag:'r'} ) );
+
+		let out = new Lang(lr.config, lr.level)
+		
+		out._id = lr.id;
+		
+		out._name = lr.name;
+		for (let k in lr.words) {
+            out._words[k as WordKey] = [...lr.words[k as WordKey]]
+        }
+        for (let k in lr.morphs) {
+            out._morphs[k as MorphKey] = [...lr.morphs[k as MorphKey]]
+        }
+		
+		out._specials = JSON.parse(JSON.stringify(lr.specials));
+		
+		return out;
 	}
 
     private make(struct: string): string { // se puede cambiar tipo
         let out: string = '';
-
+		
         for (let s = 0; s < struct.length; s++) {
             let phoneme: PhonemeType;
 
