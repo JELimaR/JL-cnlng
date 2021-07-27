@@ -1,5 +1,7 @@
 import r from './src/example'
 import Tree from './src/TreeUtil'
-import TreeUtilTest from './src/TreeUtilTest'
+import LangController from './src/LangController'
 
-TreeUtilTest()
+let lc: LangController = LangController.instance;
+
+console.log(lc)

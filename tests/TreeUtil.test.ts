@@ -1,6 +1,6 @@
-import Tree from './TreeUtil'
-import Lang from './Lang'
-
+import Tree from '../src/TreeUtil'
+import Lang from '../src/Lang'
+/*
 class Test {
 	private static _currentId: number = 0
 	id: number; elem: number;
@@ -13,7 +13,11 @@ class Test {
 	}
 }
 
+test('TreeUtil', ()=> {
+	expect( new Tree() ).toBe(4)
+})
 
+/*
 export default function() {
 	
 	const a1 = new Test(8);
@@ -39,4 +43,4 @@ export default function() {
 
 
 	let tl = new Tree<Lang>( new Lang() );
-}
+}*/
