@@ -1,4 +1,4 @@
-
+// TODO: mover
 export default class CollectionsUtilsFunctions {
 
     private static _instance: CollectionsUtilsFunctions;

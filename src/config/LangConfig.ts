@@ -37,6 +37,7 @@ export default class LangConfig implements IConfig {
     private _exponent: number;
     
     constructor(config: IConfig) {
+		config = JSON.parse(JSON.stringify(config));
         /**
          * Verify size of list of phonemes
          */

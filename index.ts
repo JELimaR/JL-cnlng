@@ -1,3 +1,5 @@
 import r from './src/example'
-r()
+import Tree from './src/TreeUtil'
+import TreeUtilTest from './src/TreeUtilTest'
 
+TreeUtilTest()

@@ -6,7 +6,7 @@
   "scripts": {
     "dev:tsc": "tsc --watch",
     "dev:nodemon": "nodemon ./dist/index.js ",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "JELimaR",
   "license": "ISC",

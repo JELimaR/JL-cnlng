@@ -121,24 +121,26 @@ export default class Lang implements ILang {
 		}; 
 	}
     get config(): IConfig { return this._config.IConfig; }
-    get words(): IWordLangSets<string> { return this.copy()._words; }
-    set words(ws: IWordLangSets<string>){ this._words = ws}
-    get morphs(): IMorphemeLangSets<string> { return this.copy()._morphs; }
-    set morphs(ms: IMorphemeLangSets<string>){ this._morphs = ms}
-    get specials(): ISpecialMorphemes<string> { return this.copy()._specials }
+	get specials(): ISpecialMorphemes<string> {
+		return JSON.parse(JSON.stringify(this._specials));
+	}
     set specials(ss: ISpecialMorphemes<string>) { this._specials = ss }
+    get morphs(): IMorphemeLangSets<string> {
+		return JSON.parse(JSON.stringify(this._morphs));
+	}
+    set morphs(ms: IMorphemeLangSets<string>){ this._morphs = ms}
+	get words(): IWordLangSets<string> {
+		return JSON.parse( JSON.stringify( this._words ) )
+	}
+    set words(ws: IWordLangSets<string>){ this._words = ws}
 
     copy(): Lang { // TODO: crear copia de los conjuntos 
         let out: Lang = new Lang(this._config.IConfig, this._level + 1);
 
-        for (let k in this._words) {
-            out._words[k as WordKey] = [...this._words[k as WordKey]]
-        }
-        for (let k in this._morphs) {
-            out._morphs[k as MorphKey] = [...this._morphs[k as MorphKey]]
-        }
-
-        out._specials = JSON.parse(JSON.stringify(this._specials));
+        out._words = this.words;
+		out._morphs = this.morphs;
+		out._specials = this.specials;
+        
         return out;
     }
 
@@ -155,7 +157,6 @@ export default class Lang implements ILang {
 		let out = new Lang(lr.config, lr.level)
 		
 		out._id = lr.id;
-		
 		out._name = lr.name;
 		for (let k in lr.words) {
             out._words[k as WordKey] = [...lr.words[k as WordKey]]
@@ -163,9 +164,7 @@ export default class Lang implements ILang {
         for (let k in lr.morphs) {
             out._morphs[k as MorphKey] = [...lr.morphs[k as MorphKey]]
         }
-		
 		out._specials = JSON.parse(JSON.stringify(lr.specials));
-		
 		return out;
 	}
 
