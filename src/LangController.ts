@@ -6,6 +6,19 @@ import Tree from './TreeUtil';
 import {IConfig} from './config/LangConfig'
 import LangTransform from './Transform/LangTransform';
 import { ChangeRule } from './Transform/LangTransformRule'
+import {
+    IMorphemeLangSets,
+    IWordLangSets,
+    MorphKey,
+    MorphSchemaCode,
+    morphSchemasCodeMap,
+    SchemaCodeExtended,
+    WordKey,
+    WordSchemaCode,
+    wordSchemasCodeMap,
+    ISpecialMorphemes,
+    isSchemaCodeExtended,
+} from './config/LangSchemaCode';
 
 interface IConfigController {
 	folderPath?: string;
@@ -16,6 +29,7 @@ interface IMemoryLangController {
 	selectedFamLangTree: Tree<Lang> | undefined;
 }
 
+// TODO: crear clase selection?
 export default class Langcontroller {
 	
 	private static _total: number = 0;
@@ -88,7 +102,7 @@ export default class Langcontroller {
 		if (!this._memory.createdFamLang)
 			throw new Error(`no existe en memoria ninguna lang creada`)
 		if (l) {
-			this._memory.createdFamLang = l.copy();
+			this._memory.createdFamLang = l.copy();// hacer esto con ILang
 		}
 		this._langFams.set(
 			Langcontroller._total++,
@@ -97,7 +111,7 @@ export default class Langcontroller {
 		this._memory.createdFamLang = undefined;
 	}
 
-	// navigate in tree lang
+	// navigate in trees lang
 	getSubFamList() {
 		let out = new Map<number, Lang>();
 		if (!this._memory.selectedFamLangTree) {
@@ -127,28 +141,50 @@ export default class Langcontroller {
 
 	selectChildById( id: number ): Lang | undefined {
 		if (this._memory.selectedFamLangTree === undefined) {
-			/*if ( this._langFams.has(id) ){
-				this._memory.selectedFamLangTree = this._langFams.get(id);
-			} */
 			this._memory.selectedFamLangTree = this._langFams.get(id);
 		} else {
 			this._memory.selectedFamLangTree = this._memory.selectedFamLangTree.subTrees.find( e => e.root.id === id );			
 		}
 		return this.selected
-		/*if (this._memory.selectedFamLangTree === undefined) {
-			throw new Error(`no se encontró lang con id: ${id}`)
-		} else {
-			return this._memory.selectedFamLangTree.root.copy();
-		}*/
 	}
-	// edit and derivate
+
+	// edit, save, influence and derivate
+	// eliminar esta funcion
 	editLangSelected(l: Lang): void {
 		if (!!this._memory.selectedFamLangTree) {
+			if ( this.isEditable() )
+				throw new Error(`No se puede editar porque tiene sublangs`)
 			this._memory.selectedFamLangTree.root = l.copy();
 			this.saveAll();
 			this._memory.selectedFamLangTree = undefined;
 		} else {
 			throw new Error(`no se encontró lang selecte`)
+		}
+	}
+
+	isEditable(): boolean {
+		return !!this._memory.selectedFamLangTree && this._memory.selectedFamLangTree.children.length === 0;
+	}
+	
+	generateNewMorphSelected( sc: MorphSchemaCode ): ILang | undefined {
+		if ( this.selected && this.isEditable()) {
+			this.selected.newMorph( sc );
+			console.log( sc )
+			return this.selected.ILang
+		}
+	}
+
+	generateNewWordSelected( sc: WordSchemaCode ): ILang | undefined {
+		if ( this.selected && this.isEditable() ) {
+			this.selected.newWord( sc );
+			console.log( sc )
+			return this.selected.ILang
+		}
+	}
+
+	saveSelected(): void {
+		if ( this.selected ) {
+			this.selected.saveSync();
 		}
 	}
 
@@ -161,11 +197,24 @@ export default class Langcontroller {
 				configChange
 			);
 			lt.addChild(der)
-			// this.selectChildById( der.id );
+			this.selectChildById( der.id );
 			return der;
 		} else {
 			throw new Error(`no se encontró lang selecte`)
 		}
+	}
+
+	// influence
+
+
+	// find
+	findLangById( id: number ): Lang | undefined {
+		let out: Lang | undefined = undefined;
+		this._langFams.forEach( (tl: Tree<Lang>) => {
+			if (!out)
+				out = tl.getById(id)
+		} )
+		return out;
 	}
 
 }

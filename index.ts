@@ -65,5 +65,9 @@ lc.selectChildById(3);
 lc.selectFather();
 lc.resetSelection();
 lc.saveAll()
-console.log( lc.getSubFamList() )
+//console.log( lc.getSubFamList() )
+lc.resetSelection();
+
+console.log( lc.findLangById( 3 )?.id )
+
 //lc.reset()
