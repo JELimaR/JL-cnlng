@@ -1,0 +1,10 @@
+
+- Crear nueva Fam
+	createFam( config: IConfig ): Lang
+
+	saveFam(l: Lang): void
+
+- Ver fam info
+	getFamList(): Map
+	selectFam( id: number ): void
+	editFam(  )

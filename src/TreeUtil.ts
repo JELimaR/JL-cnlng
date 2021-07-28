@@ -7,15 +7,16 @@ interface TreeNode /*extends Object*/ {
 
 export default class Tree<T extends TreeNode> {
 	private _root: T;
-	private _father: I | undefined = undefined;
+	private _father: Tree<T> | undefined = undefined;
 	private _children : Map<I,Tree<T>> = new Map<I,Tree<T>>();
 
-	constructor(t: T, father?: I) {
+	constructor(t: T, father?: Tree<T>) {
 		this._root = t;
 		this._father = father;
 	}
 
 	get root() { return this._root }
+	set root(t: T) { this._root = t }
 	get children(): Array<T> {
 		let out: T[] = [];
 		this._children.forEach( (val: Tree<T>) => { 
@@ -30,6 +31,7 @@ export default class Tree<T extends TreeNode> {
 		})
 		return out;
 	}
+	get father(): Tree<T> | undefined { return this._father }
 
 	// corregir tipos
 	getTreeIds() {
@@ -55,7 +57,7 @@ export default class Tree<T extends TreeNode> {
 	}
 	
 	addChild(n: T): void {
-		this._children.set( n.id, new Tree<T>( n, this._root.id ) )
+		this._children.set( n.id, new Tree<T>( n, this ) )
 	}
 
 	getSubTreeById(id: I): Tree<T> | undefined {
