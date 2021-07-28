@@ -38,7 +38,7 @@ export interface ILang {
 export default class Lang implements ILang {
 
     private static _currentId: number = 0;
-	private static folderPath: string = path.join(__dirname, `/langData`);
+	private static _folderPath: string = path.join(__dirname, `/langData`);
 
     private _level: number;
     private _id: number;
@@ -105,6 +105,8 @@ export default class Lang implements ILang {
         }
     }
 
+	static set folderPath(fp: string) {Lang._folderPath = fp}
+
     get id(): number { return this._id; }
     get level(): number { return this._level; }
     get name(): string { return this._name; }
@@ -121,21 +123,33 @@ export default class Lang implements ILang {
 		}; 
 	}
     get config(): IConfig { return this._config.IConfig; }
+	set config(newConfig: IConfig) { this._config = new LangConfig( newConfig ) }
 	get specials(): ISpecialMorphemes<string> {
 		return JSON.parse(JSON.stringify(this._specials));
 	}
-    set specials(ss: ISpecialMorphemes<string>) { this._specials = ss }
+    set specials(ss: ISpecialMorphemes<string>) { 
+		this._specials = JSON.parse(JSON.stringify(ss));
+	}
     get morphs(): IMorphemeLangSets<string> {
 		return JSON.parse(JSON.stringify(this._morphs));
 	}
-    set morphs(ms: IMorphemeLangSets<string>){ this._morphs = ms}
+    set morphs(ms: IMorphemeLangSets<string>) {
+		this._morphs = JSON.parse(JSON.stringify(ms));
+	}
 	get words(): IWordLangSets<string> {
 		return JSON.parse( JSON.stringify( this._words ) )
 	}
-    set words(ws: IWordLangSets<string>){ this._words = ws}
+    set words(ws: IWordLangSets<string>) {
+		this._words = JSON.parse(JSON.stringify(ws));
+	}
 
     copy(): Lang { // TODO: crear copia de los conjuntos 
-        let out: Lang = new Lang(this._config.IConfig, this._level + 1);
+        let out: Lang = new Lang(this._config.IConfig, this._level );
+
+		Lang._currentId--;
+
+		out._id = this._id;
+		out._name = this._name;
 
         out._words = this.words;
 		out._morphs = this.morphs;
@@ -145,13 +159,13 @@ export default class Lang implements ILang {
     }
 
 	saveSync(): void {
-		let filePath: string = path.join(Lang.folderPath, `/${this._id}.langjson`); // path no es necesario realmetne
-		fs.mkdirSync( Lang.folderPath, { recursive: true} );
+		let filePath: string = path.join(Lang._folderPath, `/${this._id}.langjson`); // path no es necesario realmetne
+		fs.mkdirSync( Lang._folderPath, { recursive: true} );
 		fs.writeFileSync(filePath, JSON.stringify( this.ILang ));
 	}
 
 	static loadSync(id: number): Lang {
-		let filePath: string = path.join(Lang.folderPath, `/${id}.langjson`);
+		let filePath: string = path.join(Lang._folderPath, `/${id}.langjson`);
 		const lr = JSON.parse( fs.readFileSync( filePath, {encoding:'utf8', flag:'r'} ) );
 
 		let out = new Lang(lr.config, lr.level)

@@ -23,6 +23,7 @@ export default class CollectionsUtilsFunctions {
     }
     
     shuffled<T>(list: Array<T>) {
+		let param = 0;
         interface Sorter {
             data: T,
             value: number
@@ -30,7 +31,8 @@ export default class CollectionsUtilsFunctions {
 
         let newlist = Array<Sorter>(), out: Array<T>;
         for (let i = 0; i < list.length; i++) {
-            newlist.push({data: list[i], value: Math.random()});
+			const value = Math.random()*(1-param)*list.length + param*(i+1);
+            newlist.push({data: list[i], value: value});
         }
         newlist = newlist.sort( (a,b) => a.value - b.value );
         out = newlist.map( (e) => e.data );
