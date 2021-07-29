@@ -1,3 +1,4 @@
+
 import path from 'path'
 
 import {
@@ -12,19 +13,19 @@ import {
     wordSchemasCodeMap,
     ISpecialMorphemes,
     isSchemaCodeExtended,
-} from './src/config/LangSchemaCode';
+} from '../src/config/LangSchemaCode';
 
-import r from './src/example'
-import Tree from './src/TreeUtil'
-import LangController from './src/LangController'
-import Lang, { ILang } from './src/Lang';
-import { defaultConfig } from './src/config/ConfigConstants';
-import { conssets, defaultPhonemeSets, ssets, vowssets } from './src/config/Phonemes';
-import CollectionsUtilsFunctions from './src/config/CollectionsUtilsFunctions';
-import { IConfig } from './src/config/LangConfig';
-import LangTransform from './src/Transform/LangTransform';
-import { ChangeRule } from './src/Transform/LangTransformRule'
-import { CorthsList, VorthsList } from './src/config/Orths';
+import r from '../src/example'
+import Tree from '../src/TreeUtil'
+import LangController from '../src/LangController'
+import Lang, { ILang } from '../src/Lang';
+import { defaultConfig } from '../src/config/ConfigConstants';
+import { conssets, defaultPhonemeSets, ssets, vowssets } from '../src/config/Phonemes';
+import CollectionsUtilsFunctions from '../src/config/CollectionsUtilsFunctions';
+import { IConfig } from '../src/config/LangConfig';
+import LangTransform from '../src/Transform/LangTransform';
+import { ChangeRule } from '../src/Transform/LangTransformRule'
+import { CorthsList, VorthsList } from '../src/config/Orths';
 
 let config: IConfig = {
 	...defaultConfig,
@@ -35,7 +36,7 @@ let config: IConfig = {
 }
 
 let lc: LangController = LangController.getInstance({
-	folderPath: path.join(__dirname, '/../data')
+	folderPath: path.join(__dirname, '/../../data')
 });
 
 lc.reset()

@@ -20,6 +20,7 @@ export default class LangTransform {
         let out: Lang = l.copy();
         for (let k in other.words) {
             // recorrer mejor este set y langlisar palabras?
+			// 
             other.words[k as WordKey].forEach((v) => {
                 out.words[k as WordKey].push(v)
             })

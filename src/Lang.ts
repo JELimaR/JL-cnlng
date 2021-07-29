@@ -142,10 +142,16 @@ export default class Lang implements ILang {
     set words(ws: IWordLangSets<string>) {
 		this._words = JSON.parse(JSON.stringify(ws));
 	}
+	set editableFields(l: ILang) {
+		this.name = l.name;
+		this.config = l.config;
+		this.specials = l.specials;
+		this.morphs = l.morphs;
+		this.words = l.words;
+	}
 
     copy(): Lang { // TODO: crear copia de los conjuntos 
         let out: Lang = new Lang(this._config.IConfig, this._level );
-
 		Lang._currentId--;
 
 		out._id = this._id;
@@ -166,6 +172,8 @@ export default class Lang implements ILang {
 
 	static loadSync(id: number): Lang {
 		let filePath: string = path.join(Lang._folderPath, `/${id}.langjson`);
+
+		if (fs.existsSync(filePath)) {		
 		const lr = JSON.parse( fs.readFileSync( filePath, {encoding:'utf8', flag:'r'} ) );
 
 		let out = new Lang(lr.config, lr.level)
@@ -179,7 +187,7 @@ export default class Lang implements ILang {
             out._morphs[k as MorphKey] = [...lr.morphs[k as MorphKey]]
         }
 		out._specials = JSON.parse(JSON.stringify(lr.specials));
-		return out;
+		return out;} else { throw new Error(``) }
 	}
 
     private make(struct: string): string { // se puede cambiar tipo

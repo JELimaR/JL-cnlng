@@ -1,19 +1,30 @@
 
 type I = number | string;
 
-interface TreeNode /*extends Object*/ {
+interface INodeWithID /*extends Object*/ {
 	id: I
 }
 
-export default class Tree<T extends TreeNode> {
+export interface ITreeRoots<T> {
+	root: T,
+	children: ITreeRoots<T>[];
+}
+
+export interface ITreeIds<I> {
+	root: I,
+	children: ITreeRoots<I>[];
+}
+
+export default class Tree<T extends INodeWithID> {
 	private _root: T;
 	private _father: Tree<T> | undefined = undefined;
 	private _children : Map<I,Tree<T>> = new Map<I,Tree<T>>();
 
-	constructor(t: T, father?: Tree<T>) {
+	constructor(t: T) {
 		this._root = t;
-		this._father = father;
 	}
+
+	private setFather(father?: Tree<T>) { this._father = father; }
 
 	get root() { return this._root }
 	set root(t: T) { this._root = t }
@@ -33,9 +44,25 @@ export default class Tree<T extends TreeNode> {
 	}
 	get father(): Tree<T> | undefined { return this._father }
 
-	// corregir tipos
-	getTreeIds() {
-		let a: any[] = [];
+	get ancients(): Array<T> {
+		let out: T[] = [];
+		if ( this._father !== undefined ) {
+			out = [...this._father.ancients, this._father._root];
+		}
+		return out;
+	}
+
+	get brothers(): Array<T> {
+		let out: T[] = [];
+		if ( this._father !== undefined ) {
+			out = this._father.children;
+			out = out.filter( (t: T) => this._root.id !== t.id );
+		}
+		return out;
+	}
+
+	getTreeIds(): ITreeIds<I> {
+		let a: ITreeIds<I>[] = [];
 		this._children.forEach( (e: Tree<T>) => {
 			a.push( e.getTreeIds() )
 		} )
@@ -44,9 +71,9 @@ export default class Tree<T extends TreeNode> {
 			children: a,
 		}
 	}
-	// corregir tipos
-	getTreeRoots() {
-		let a: any[] = [];
+	
+	getTreeRoots(): ITreeRoots<T> {
+		let a: ITreeRoots<T>[] = [];
 		this._children.forEach( (e: Tree<T>) => {
 			a.push( e.getTreeRoots() )
 		} )
@@ -56,8 +83,14 @@ export default class Tree<T extends TreeNode> {
 		}
 	}
 	
-	addChild(n: T): void {
-		this._children.set( n.id, new Tree<T>( n, this ) )
+	addChild(n: T): Tree<T> {
+		if (n.id === this._root.id) {
+			throw new Error(`Exist a child with id: ${n.id}`)
+		}
+		let tree = new Tree<T>(n);
+		tree.setFather( this );
+		this._children.set( n.id, tree )
+		return tree
 	}
 
 	getSubTreeById(id: I): Tree<T> | undefined {
@@ -79,8 +112,8 @@ export default class Tree<T extends TreeNode> {
 		return tree && tree._root;
 	}
 
-	forEach(callback: (t: T, i?: I) => void): void {
-		callback( this._root, this._root.id );
+	forEach(callback: (t: T, i: I, tree: Tree<T>) => void): void {
+		callback( this._root, this._root.id, this );
 		this._children.forEach( (v: Tree<T>) => {
 			v.forEach( callback )
 		} )
