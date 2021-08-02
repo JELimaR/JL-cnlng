@@ -19,7 +19,7 @@ import {
 } from './config/LangSchemaCode';
 import globalSets, { PhonemeType, str2phoneme } from './config/Phonemes';
 
-import CollectionsUtilsFunctions from './config/CollectionsUtilsFunctions';
+import {CollectionsUtilsFunctions} from 'jl-utlts';
 
 import { CorthKey, CorthsList, VorthKey, VorthsList } from './config/Orths';
 

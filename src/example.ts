@@ -1,7 +1,7 @@
 import Lang, { ILang } from './Lang';
 import { defaultConfig } from './config/ConfigConstants';
 import { conssets, defaultPhonemeSets, ssets, vowssets } from './config/Phonemes';
-import CollectionsUtilsFunctions from './config/CollectionsUtilsFunctions';
+import { CollectionsUtilsFunctions } from 'jl-utlts';
 import { IConfig } from './config/LangConfig';
 import LangTransform from './Transform/LangTransform';
 import { ChangeRule } from './Transform/LangTransformRule'
@@ -82,11 +82,11 @@ export default function() {
 		console.error(e)
 	}
 
-	l1.saveSync()
+	/*l1.saveSync()
 	let langload = Lang.loadSync( 0 );
 	console.log( l1 )
 	console.log('---------')
-	console.log( langload )
+	console.log( langload )*/
 	
 
 }

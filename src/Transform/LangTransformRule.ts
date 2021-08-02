@@ -62,8 +62,7 @@ export class ChangeRule {
 
         let count: number = 0;
         while (e) {
-            count++;
-            const aux = s;
+            count+=1;
             out = out.replace( this.condition, `${e[1]}${this.new}${e[2]}` );
             
             e = this.condition.exec( out );

@@ -2,7 +2,7 @@ import { isSchemaCodeExtended, IWordLangSets, WordKey } from './LangSchemaCode';
 import { IPhonemesSets, PhonemeType, PhonemeTypeExtended } from './Phonemes';
 import { IOrths } from './Orths';
 
-import CollectionsUtilsFunctions from './CollectionsUtilsFunctions';
+import {CollectionsUtilsFunctions} from 'jl-utlts';
 const CUF: CollectionsUtilsFunctions = CollectionsUtilsFunctions.getInstance();
 
 export interface IConfig {

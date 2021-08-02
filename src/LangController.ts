@@ -2,22 +2,14 @@ import fs from 'fs';
 import path from 'path';
 
 import Lang, {ILang} from './Lang';
-import Tree, {ITreeIds} from './TreeUtil';
+import { ITreeIds, Tree } from 'jl-utlts';
+
 import {IConfig} from './config/LangConfig'
 import LangTransform from './Transform/LangTransform';
 import { ChangeRule } from './Transform/LangTransformRule'
 import {
-    IMorphemeLangSets,
-    IWordLangSets,
-    MorphKey,
     MorphSchemaCode,
-    morphSchemasCodeMap,
-    SchemaCodeExtended,
-    WordKey,
     WordSchemaCode,
-    wordSchemasCodeMap,
-    ISpecialMorphemes,
-    isSchemaCodeExtended,
 } from './config/LangSchemaCode';
 
 interface IConfigController {
@@ -176,9 +168,9 @@ export default class Langcontroller {
 	selectFather(): ILang | undefined {
 		let out: ILang | undefined = undefined
 		if (this._mem.selectedTree !== undefined) {
-			this._mem.selectedTree = this._mem.selectedTree.father;
+			this._mem.selectedTree = this._mem.selectedTree.fatherTree;
 			if (this.selected !== undefined)
-			out = this.selected.ILang;
+				out = this.selected.ILang;
 		}
 		return out;
 	}
@@ -188,7 +180,7 @@ export default class Langcontroller {
 		if (this._mem.selectedTree === undefined) {
 			this._mem.selectedTree = this._langFams.get(id);
 		} else {
-			this._mem.selectedTree = this._mem.selectedTree.subTrees.find( e => e.root.id === id );
+			this._mem.selectedTree = this._mem.selectedTree.childrenTrees.find( e => e.root.id === id );
 		}
 		if (this.selected) { out = this.selected.ILang }
 		return out
@@ -263,7 +255,7 @@ export default class Langcontroller {
 		let out: Lang | undefined = undefined;
 		this._langFams.forEach( (tl: Tree<Lang>) => {
 			if (!out)
-				out = tl.getById(id)
+				out = tl.getRootById(id)
 		} )
 		return out;
 	}
