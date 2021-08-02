@@ -2,8 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import Lang, {ILang} from './Lang';
-import { ITreeIds, Tree } from 'jl-utlts';
-
+import {Tree, ITreeIds} from 'jl-utlts';
 import {IConfig} from './config/LangConfig'
 import LangTransform from './Transform/LangTransform';
 import { ChangeRule } from './Transform/LangTransformRule'
@@ -25,6 +24,8 @@ interface IMemoryLangController {
 export default class Langcontroller {
 	
 	private static _instance: Langcontroller;
+
+	private _hasConfig: boolean = false;
 	private _folderPath: string = path.join(__dirname, `/langData`);
 
 	private _mem: IMemoryLangController = {
@@ -39,10 +40,8 @@ export default class Langcontroller {
 		return this._langFams
 	}
 
-	private constructor(i: IConfigController) { // hacer esto en otra funcion
-		if (i.folderPath) {
-			this.changeFolderPath( i.folderPath )
-		}
+	private constructor() { // hacer esto en otra funcion
+
 	}
 
 	private changeFolderPath(p: string) {
@@ -57,11 +56,18 @@ export default class Langcontroller {
 		}
 	}
 
-	static getInstance(i: IConfigController): Langcontroller {
+	static getInstance(): Langcontroller {
 		if ( !Langcontroller._instance ) {
-			Langcontroller._instance = new Langcontroller(i)
+			Langcontroller._instance = new Langcontroller()
 		}
 		return Langcontroller._instance;
+	}
+
+	configurate(i: IConfigController) {
+		this._hasConfig = true; 
+		if (i.folderPath) {
+			this.changeFolderPath( i.folderPath )
+		}
 	}
 	
 	reset(): void {
@@ -78,13 +84,13 @@ export default class Langcontroller {
 				
 				const f = JSON.parse( fs.readFileSync( filePath, {encoding:'utf8', flag:'r'} ) );
 
-				console.log( JSON.stringify(this.createLangFam( f ).getTreeIds() ));
+				//console.log( JSON.stringify(this.createLangFam( f ).getTreeIds() ));
 				this._langFams.set(i, this.createLangFam( f ) )
 								
 				i++;
 				filePath = path.join(this._folderPath, `/fam_${i}.famjson`);
 			}
-
+			this._total = i;
 		}
 	}
 
@@ -108,12 +114,13 @@ export default class Langcontroller {
 	}
 
 	saveAll(): void {
+		
 		fs.mkdirSync( this._folderPath, { recursive: true} );
 		this._langFams.forEach( (t: Tree<Lang>, k: number) => {
 			t.forEach( (l: Lang, i) => {
 				l.saveSync();
 			} )
-			let filePath: string = path.join(this._folderPath, `/fam_${k}.famjson`); // path no es necesario realmetne
+			let filePath: string = path.join(this._folderPath, `/fam_${k}.famjson`); 
 			fs.writeFileSync(filePath, JSON.stringify( t.getTreeIds() ));
 		} )
 	}
