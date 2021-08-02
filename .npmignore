@@ -6,4 +6,5 @@ src/
 test/
 index.ts
 *.txt
-jest.config.js
+
+package-lock.json 

@@ -21,6 +21,7 @@ interface IMemoryLangController {
 }
 
 // TODO: crear clase selection?
+// TODO: crear clase edit?
 export default class Langcontroller {
 	
 	private static _instance: Langcontroller;
