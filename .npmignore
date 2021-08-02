@@ -1,0 +1,9 @@
+
+*.langjson
+*.famjson
+
+src/
+test/
+index.ts
+*.txt
+jest.config.js

@@ -24,7 +24,6 @@ interface IMemoryLangController {
 // TODO: crear clase selection?
 export default class Langcontroller {
 	
-	private static _total: number = 0;
 	private static _instance: Langcontroller;
 	private _folderPath: string = path.join(__dirname, `/langData`);
 
@@ -34,6 +33,7 @@ export default class Langcontroller {
 	}
 
 	private _langFams: Map<number,Tree<Lang>> = new Map<number,Tree<Lang>>();
+	private _total: number = 0;
 
 	get borrar(): Map<number, Tree<Lang>> {
 		return this._langFams
@@ -67,6 +67,7 @@ export default class Langcontroller {
 	reset(): void {
 		fs.rmSync(this._folderPath, { recursive: true });
 		this._langFams = new Map<number,Tree<Lang>>();
+		this._total = 0;
 	}
 
 	loadAll(): void {
@@ -107,7 +108,6 @@ export default class Langcontroller {
 	}
 
 	saveAll(): void {
-		let tree: any[] = []; // borrar
 		fs.mkdirSync( this._folderPath, { recursive: true} );
 		this._langFams.forEach( (t: Tree<Lang>, k: number) => {
 			t.forEach( (l: Lang, i) => {
@@ -131,7 +131,7 @@ export default class Langcontroller {
 			this._mem.createdLang.editableFields = l;
 		}
 		this._langFams.set(
-			Langcontroller._total++,
+			this._total++,
 			new Tree<Lang>(this._mem.createdLang)
 		);
 		this._mem.createdLang = undefined;
