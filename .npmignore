@@ -2,9 +2,17 @@
 *.langjson
 *.famjson
 
-src/
-test/
-index.ts
 *.txt
 
-package-lock.json 
+.eslintrc.json
+.gitignore
+
+./vscode/*
+node_modules/*
+src/*
+test/*
+jest.config.js
+scripts/*
+.git/*
+
+tsconfig.json

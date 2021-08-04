@@ -1,7 +1,4 @@
 
-import fs from 'fs';
-import path from 'path';
-
 import { defaultConfig } from './config/ConfigConstants';
 import LangConfig, { IConfig } from './config/LangConfig';
 import {
@@ -38,7 +35,6 @@ export interface ILang {
 export default class Lang implements ILang {
 
     private static _currentId: number = 0;
-	private static _folderPath: string = path.join(__dirname, `/langData`);
 
     private _level: number;
     private _id: number;
@@ -105,8 +101,6 @@ export default class Lang implements ILang {
         }
     }
 
-	static set folderPath(fp: string) {Lang._folderPath = fp}
-
     get id(): number { return this._id; }
     get level(): number { return this._level; }
     get name(): string { return this._name; }
@@ -150,7 +144,7 @@ export default class Lang implements ILang {
 		this.words = l.words;
 	}
 
-    copy(): Lang { // TODO: crear copia de los conjuntos 
+    copy(): Lang { 
         let out: Lang = new Lang(this._config.IConfig, this._level );
 		Lang._currentId--;
 
@@ -164,31 +158,19 @@ export default class Lang implements ILang {
         return out;
     }
 
-	saveSync(): void {
-		let filePath: string = path.join(Lang._folderPath, `/${this._id}.langjson`); // path no es necesario realmetne
-		fs.mkdirSync( Lang._folderPath, { recursive: true} );
-		fs.writeFileSync(filePath, JSON.stringify( this.ILang ));
-	}
+    static load(il: ILang): Lang {
+        let out: Lang = new Lang(il.config, il.level);
+        Lang._currentId--;
 
-	static loadSync(id: number): Lang {
-		let filePath: string = path.join(Lang._folderPath, `/${id}.langjson`);
+        out._id = il.id;
+		out._name = il.name;
 
-		if (fs.existsSync(filePath)) {		
-		const lr = JSON.parse( fs.readFileSync( filePath, {encoding:'utf8', flag:'r'} ) );
+        out._words = il.words;
+		out._morphs = il.morphs;
+		out._specials = il.specials;
 
-		let out = new Lang(lr.config, lr.level)
-		
-		out._id = lr.id;
-		out._name = lr.name;
-		for (let k in lr.words) {
-            out._words[k as WordKey] = [...lr.words[k as WordKey]]
-        }
-        for (let k in lr.morphs) {
-            out._morphs[k as MorphKey] = [...lr.morphs[k as MorphKey]]
-        }
-		out._specials = JSON.parse(JSON.stringify(lr.specials));
-		return out;} else { throw new Error(``) }
-	}
+        return out;
+    }
 
     private make(struct: string): string { // se puede cambiar tipo
         let out: string = '';
@@ -313,7 +295,7 @@ export default class Lang implements ILang {
         return this.genreder(genre, w);
     }
 
-    getFamilynNameGenred(genre: 'm' | 'f', w: string): string {
+    getFamilyNameGenred(genre: 'm' | 'f', w: string): string {
         if (this._words['FamilyNeutralNames'].find( e => e === w) === undefined) {
             throw new Error(`${w} is not a FamilyNeutralName`)
         }

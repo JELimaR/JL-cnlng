@@ -1,5 +1,5 @@
 
-import Lang from "../Lang";
+import Lang, { ILang } from "../Lang";
 import { IConfig }from '../config/LangConfig';
 import { IMorphemeLangSets, ISpecialMorphemes, IWordLangSets, MorphKey, WordKey } from "../config/LangSchemaCode";
 import { ChangeRule } from "./LangTransformRule";
@@ -16,7 +16,7 @@ export default class LangTransform {
         return LangTransform._instance;
     }
 
-    influence(l: Lang, other: Lang): Lang {
+    influence(l: Lang, other: ILang): Lang {
         let out: Lang = l.copy();
         for (let k in other.words) {
             // recorrer mejor este set y langlisar palabras?

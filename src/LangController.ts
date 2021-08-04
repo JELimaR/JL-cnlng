@@ -1,8 +1,6 @@
-import fs from 'fs';
-import path from 'path';
 
 import Lang, {ILang} from './Lang';
-import {Tree, ITreeIds} from 'jl-utlts';
+import {Tree, ITreeRoots} from 'jl-utlts';
 import {IConfig} from './config/LangConfig'
 import LangTransform from './Transform/LangTransform';
 import { ChangeRule } from './Transform/LangTransformRule'
@@ -11,13 +9,15 @@ import {
     WordSchemaCode,
 } from './config/LangSchemaCode';
 
-interface IConfigController {
-	folderPath?: string;
-}
-
 interface IMemoryLangController {
 	createdLang: Lang | undefined;
 	selectedTree: Tree<Lang> | undefined;
+}
+
+
+export interface ILoadController {
+	_total: number;
+	_langFams: ITreeRoots<ILang>[];
 }
 
 // TODO: crear clase selection?
@@ -25,9 +25,6 @@ interface IMemoryLangController {
 export default class Langcontroller {
 	
 	private static _instance: Langcontroller;
-
-	private _hasConfig: boolean = false;
-	private _folderPath: string = path.join(__dirname, `/langData`);
 
 	private _mem: IMemoryLangController = {
 		createdLang: undefined,
@@ -45,59 +42,54 @@ export default class Langcontroller {
 
 	}
 
-	private changeFolderPath(p: string) {
-		if (p !== this._folderPath) {
-			if ( fs.existsSync( this._folderPath ) )
-				fs.rmSync(this._folderPath, { recursive: true });
-			this._folderPath = p;
-			Lang.folderPath = this._folderPath;
-			if ( !fs.existsSync( this._folderPath ) )
-				fs.mkdirSync( this._folderPath, { recursive: true} );
-			this.saveAll()
-		}
-	}
-
-	static getInstance(): Langcontroller {
+	static get instance(): Langcontroller {
 		if ( !Langcontroller._instance ) {
 			Langcontroller._instance = new Langcontroller()
 		}
 		return Langcontroller._instance;
 	}
 
-	configurate(i: IConfigController) {
-		this._hasConfig = true; 
-		if (i.folderPath) {
-			this.changeFolderPath( i.folderPath )
-		}
-	}
-	
-	reset(): void {
-		fs.rmSync(this._folderPath, { recursive: true });
-		this._langFams = new Map<number,Tree<Lang>>();
-		this._total = 0;
-	}
+	saveAll( ): ILoadController {
+		let outLangFams: ITreeRoots<ILang>[] = [];
 
-	loadAll(): void {
-		if (fs.existsSync( this._folderPath )) {
-			let i: number = 0;
-			let filePath: string = path.join(this._folderPath, `/fam_${i}.famjson`);
-			while ( fs.existsSync(filePath) ) {
-				
-				const f = JSON.parse( fs.readFileSync( filePath, {encoding:'utf8', flag:'r'} ) );
+		this._langFams.forEach( (tl) => {
+			let newT: Tree<ILang> = new Tree<ILang>( tl.root.ILang );
+			tl.forEach( (l,i,t) => {
+				if (t.father) {
+					let f = newT.getSubTreeById(t.father.id);
+					f!.addChild( t.root.ILang )
+				}
+			} )
+			outLangFams.push( newT.getTreeRoots() );
+			console.log( JSON.stringify( newT.getTreeIds() ))
+		})
 
-				//console.log( JSON.stringify(this.createLangFam( f ).getTreeIds() ));
-				this._langFams.set(i, this.createLangFam( f ) )
-								
-				i++;
-				filePath = path.join(this._folderPath, `/fam_${i}.famjson`);
-			}
-			this._total = i;
+		return {
+			'_total': this._total,
+			'_langFams': outLangFams,
 		}
 	}
 
-	private createLangFam(obj: ITreeIds<number>, father?: Tree<Lang>): Tree<Lang> {
+	loadAll( obj: ILoadController ) {
+		this.reset()
+
+		this._mem = {
+			createdLang: undefined,
+			selectedTree: undefined, 
+		};
+
+		this._total = obj._total;
+
+		obj._langFams.forEach( (tr, i) => {
+			const r: Tree<Lang> = this.createLangFam( tr )
+			this._langFams.set( i, r )
+		} )
+	}
+
+	private createLangFam(obj: ITreeRoots<ILang>, father?: Tree<Lang>): Tree<Lang> {
 		let out: Tree<Lang>, added: Tree<Lang>;
-		const l = Lang.loadSync(obj.root);
+		
+		const l = Lang.load(obj.root);
 
 		if (!father) {
 			out = new Tree<Lang>( l );
@@ -113,17 +105,10 @@ export default class Langcontroller {
 
 		return out;
 	}
-
-	saveAll(): void {
-		
-		fs.mkdirSync( this._folderPath, { recursive: true} );
-		this._langFams.forEach( (t: Tree<Lang>, k: number) => {
-			t.forEach( (l: Lang, i) => {
-				l.saveSync();
-			} )
-			let filePath: string = path.join(this._folderPath, `/fam_${k}.famjson`); 
-			fs.writeFileSync(filePath, JSON.stringify( t.getTreeIds() ));
-		} )
+	
+	reset(): void {
+		this._langFams.clear();
+		this._total = 0;
 	}
 
 	// new Fam
@@ -153,16 +138,16 @@ export default class Langcontroller {
 		}
 		return out;
 	}
-	get subFamList(): Map<number, ILang> {
-		let out = new Map<number, ILang>();
+	get subFamArray(): ILang[] {
+		let out: ILang[] = [];
 		if (!this._mem.selectedTree) {
 			this._langFams.forEach( (v: Tree<Lang>) => {
-				out.set( v.root.id, v.root );
+				out.push( v.root.ILang );
 			})
 		} else {
 			this._mem.selectedTree.children.forEach( (v: Lang) => {
-				out.set( v.id, v.ILang )
-			} )
+				out.push( v.ILang )
+			})
 		}
 		return out;
 	}
@@ -171,6 +156,10 @@ export default class Langcontroller {
 
 	private get selected(): Lang | undefined { 
 		return this._mem.selectedTree && this._mem.selectedTree.root;
+	}
+
+	getSelected(): ILang | undefined {
+		return this.selected?.ILang
 	}
 
 	selectFather(): ILang | undefined {
@@ -222,11 +211,29 @@ export default class Langcontroller {
 		}
 	}
 
-	saveSelected(): void {
-		if ( !!this.selected ) {
-			this.selected.saveSync();
+	getPersonNameGenredSelected(genre: 'm' | 'f', w: string): string | undefined {
+		if ( !!this.selected && this.isEditable() ) {
+			return this.selected.getPersonNameGenred( genre, w );
 		}
-	}
+    }
+
+    getFamilyNameGenredSelected(genre: 'm' | 'f', w: string): string | undefined {
+        if ( !!this.selected && this.isEditable() ) {
+			return this.selected.getFamilyNameGenred( genre, w );
+		}
+    }
+
+    genrederSelected(genre: 'm' | 'f', w: string): string | undefined {
+        if ( !!this.selected && this.isEditable() ) {
+			return this.selected.genreder( genre, w );
+		}
+    }
+
+    getSpelledWordSelected(word: string): string | undefined {
+		if ( !!this.selected && this.isEditable() ) {
+			return this.selected.getSpelledWord( word );
+		}
+    }
 
 	derivateLangSelected(rules: ChangeRule[], configChange: IConfig): ILang {
 		if (!!this._mem.selectedTree) {
@@ -249,7 +256,7 @@ export default class Langcontroller {
 		if (!!this._mem.selectedTree) {
 			let lt: Tree<Lang> = this._mem.selectedTree;
 			
-			let inf: Lang = LangTransform.instance.influence( lt.root, Lang.loadSync( l.id ) )
+			let inf: Lang = LangTransform.instance.influence( lt.root, l )
 			lt.addChild(inf)
 			this.selectChildById( inf.id );
 			return inf.ILang;

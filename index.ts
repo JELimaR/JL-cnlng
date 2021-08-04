@@ -1,5 +1,5 @@
 
-//import './tests/LangController.test';
+import './test/LangController.test';
 
 import Langcontroller from './src/LangController'
 import { ILang } from './src/Lang';

@@ -1,6 +1,4 @@
 
-import path from 'path'
-
 import LangController from '../src/LangController'
 // import Lang, { ILang } from '../src/Lang';
 import { defaultConfig } from '../src/config/ConfigConstants';
@@ -10,6 +8,7 @@ import { IConfig } from '../src/config/LangConfig';
 import { ChangeRule } from '../src/Transform/LangTransformRule'
 import { CorthsList, VorthsList } from '../src/config/Orths';
 
+let memSim: string | undefined = undefined;
 
 let config: IConfig = {
 	...defaultConfig,
@@ -19,9 +18,7 @@ let config: IConfig = {
 	},
 }
 
-let lc: LangController = LangController.getInstance({
-	folderPath: path.join(__dirname, '/../../data')
-});
+let lc: LangController = LangController.instance
 
 lc.reset()
 
@@ -35,7 +32,8 @@ lc.addFam();
 lc.createFam();
 lc.addFam();
 
-lc.saveAll();
+memSim = JSON.stringify( lc.saveAll() );
+console.log(memSim)
 lc.selectChildById(0)
 //console.log(lc.selectChildById(0));
 
@@ -74,7 +72,7 @@ lc.resetSelection();
 lc.selectChildById(2)
 lc.derivateLangSelected( rules, configChange )
 lc.derivateLangSelected( rules, configChange )
-lc.saveAll()
+memSim =  JSON.stringify(lc.saveAll());
 //console.log( lc.getSubFamList() )
 //lc.resetSelection();
 let s = lc.selectedTree?.ancients;
@@ -87,7 +85,9 @@ s = lc.selectedTree?.brothers;
 
 let prev = lc.borrar
 
-lc.loadAll()
+lc.loadAll( JSON.parse(memSim) )
+
+console.log( memSim )
 
 let post = lc.borrar
 
