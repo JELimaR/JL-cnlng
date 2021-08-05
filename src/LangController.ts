@@ -3,7 +3,7 @@ import Lang, {ILang} from './Lang';
 import {Tree, ITreeRoots} from 'jl-utlts';
 import {IConfig} from './config/LangConfig'
 import LangTransform from './Transform/LangTransform';
-import { ChangeRule } from './Transform/LangTransformRule'
+import { ChangeRule } from './Transform/LangTransformRule';
 import {
     MorphSchemaCode,
     WordSchemaCode,
@@ -34,13 +34,7 @@ export default class Langcontroller {
 	private _langFams: Map<number,Tree<Lang>> = new Map<number,Tree<Lang>>();
 	private _total: number = 0;
 
-	get borrar(): Map<number, Tree<Lang>> {
-		return this._langFams
-	}
-
-	private constructor() { // hacer esto en otra funcion
-
-	}
+	private constructor() { /* hacer esto en otra funcion*/ }
 
 	static get instance(): Langcontroller {
 		if ( !Langcontroller._instance ) {
@@ -49,19 +43,23 @@ export default class Langcontroller {
 		return Langcontroller._instance;
 	}
 
+	private treeLangTotreeILang( tl: Tree<Lang> ): Tree<ILang> {
+		let out: Tree<ILang> = new Tree<ILang>( tl.root.ILang );
+		tl.forEach( (l,i,t) => {
+			if (t.father) {
+				let f = out.getSubTreeById(t.father.id);
+				f!.addChild( t.root.ILang )
+			}
+		} )
+		return out;
+	}
+
 	saveAll( ): ILoadController {
 		let outLangFams: ITreeRoots<ILang>[] = [];
 
 		this._langFams.forEach( (tl) => {
-			let newT: Tree<ILang> = new Tree<ILang>( tl.root.ILang );
-			tl.forEach( (l,i,t) => {
-				if (t.father) {
-					let f = newT.getSubTreeById(t.father.id);
-					f!.addChild( t.root.ILang )
-				}
-			} )
+			let newT: Tree<ILang> = this.treeLangTotreeILang( tl )
 			outLangFams.push( newT.getTreeRoots() );
-			console.log( JSON.stringify( newT.getTreeIds() ))
 		})
 
 		return {
@@ -107,7 +105,12 @@ export default class Langcontroller {
 	}
 	
 	reset(): void {
+		this._mem = {
+			createdLang: undefined,
+			selectedTree: undefined, 
+		};
 		this._langFams.clear();
+		Lang.reset();
 		this._total = 0;
 	}
 
@@ -131,10 +134,10 @@ export default class Langcontroller {
 	}
 
 	// navigate in trees lang
-	get selectedTree(): Tree<Lang> | undefined { // TODO: cambiar
-		let out: Tree<Lang> | undefined = undefined;
-		if ( this._mem.selectedTree !== undefined ) {
-			out = this._mem.selectedTree
+	get selectedTree(): Tree<ILang> | undefined { // TODO: cambiar
+		let out: Tree<ILang> | undefined = undefined;
+		if ( !!this._mem.selectedTree ) {
+			out = this.treeLangTotreeILang( this._mem.selectedTree )
 		}
 		return out;
 	}
@@ -173,14 +176,35 @@ export default class Langcontroller {
 	}
 
 	selectChildById( id: number ): ILang | undefined {
-		let out: ILang | undefined = undefined
+		let out: ILang | undefined;
+
 		if (this._mem.selectedTree === undefined) {
-			this._mem.selectedTree = this._langFams.get(id);
+			this._langFams.forEach( (tl) => {
+				if ( tl.root.id === id )
+					this._mem.selectedTree = tl
+			});
 		} else {
 			this._mem.selectedTree = this._mem.selectedTree.childrenTrees.find( e => e.root.id === id );
 		}
+
 		if (this.selected) { out = this.selected.ILang }
 		return out
+	}
+
+	selectLangById(id: number): ILang | undefined {
+		let out: ILang | undefined;
+		let tout: Tree<Lang> | undefined;
+
+		this._langFams.forEach( (tl: Tree<Lang>) => {
+			if (!tout)
+				tout = tl.getSubTreeById(id)
+		} )
+
+		if ( tout ) {
+			this._mem.selectedTree = tout;
+			out = tout.root.ILang
+		}
+		return out;
 	}
 
 	// edit, save, influence and derivate
@@ -257,8 +281,8 @@ export default class Langcontroller {
 			let lt: Tree<Lang> = this._mem.selectedTree;
 			
 			let inf: Lang = LangTransform.instance.influence( lt.root, l )
-			lt.addChild(inf)
-			this.selectChildById( inf.id );
+			// lt.addChild(inf)
+			// this.selectChildById( inf.id );
 			return inf.ILang;
 		} else {
 			throw new Error(`no se encontró lang selected`)
@@ -266,11 +290,11 @@ export default class Langcontroller {
 	}
 
 	// find
-	findLangById( id: number ): Lang | undefined {
-		let out: Lang | undefined = undefined;
+	findLangById( id: number ): ILang | undefined {
+		let out: ILang | undefined = undefined;
 		this._langFams.forEach( (tl: Tree<Lang>) => {
 			if (!out)
-				out = tl.getRootById(id)
+				out = tl.getRootById(id)?.ILang
 		} )
 		return out;
 	}

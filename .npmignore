@@ -7,12 +7,15 @@
 .eslintrc.json
 .gitignore
 
-./vscode/*
+.vscode/*
 node_modules/*
 src/*
-test/*
 jest.config.js
 scripts/*
 .git/*
+
+*.test.*
+
+index.ts
 
 tsconfig.json

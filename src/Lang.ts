@@ -101,6 +101,10 @@ export default class Lang implements ILang {
         }
     }
 
+    static reset(): void {
+        Lang._currentId = 0;
+    }
+
     get id(): number { return this._id; }
     get level(): number { return this._level; }
     get name(): string { return this._name; }
@@ -143,20 +147,6 @@ export default class Lang implements ILang {
 		this.morphs = l.morphs;
 		this.words = l.words;
 	}
-
-    copy(): Lang { 
-        let out: Lang = new Lang(this._config.IConfig, this._level );
-		Lang._currentId--;
-
-		out._id = this._id;
-		out._name = this._name;
-
-        out._words = this.words;
-		out._morphs = this.morphs;
-		out._specials = this.specials;
-        
-        return out;
-    }
 
     static load(il: ILang): Lang {
         let out: Lang = new Lang(il.config, il.level);
@@ -330,6 +320,5 @@ export default class Lang implements ILang {
 
         return out;
     }
-
 }
 

@@ -1,11 +1,11 @@
-import Lang, { ILang } from './Lang';
-import { defaultConfig } from './config/ConfigConstants';
-import { conssets, defaultPhonemeSets, ssets, vowssets } from './config/Phonemes';
+import Lang, { ILang } from '../Lang';
+import { defaultConfig } from '../config/ConfigConstants';
+import { conssets, defaultPhonemeSets, ssets, vowssets } from '../config/Phonemes';
 import { CollectionsUtilsFunctions } from 'jl-utlts';
-import { IConfig } from './config/LangConfig';
-import LangTransform from './Transform/LangTransform';
-import { ChangeRule } from './Transform/LangTransformRule'
-import { CorthsList, VorthsList } from './config/Orths';
+import { IConfig } from '../config/LangConfig';
+import LangTransform from '../Transform/LangTransform';
+import { ChangeRule } from '../Transform/LangTransformRule'
+import { CorthsList, VorthsList } from '../config/Orths';
 
 export default function() {
 	const CUF = CollectionsUtilsFunctions.getInstance();
@@ -44,7 +44,7 @@ export default function() {
 	console.log( wf )
 	console.log( wm )
 
-	let l1json: ILang = JSON.parse(JSON.stringify(l1));
+	//let l1json: ILang = JSON.parse(JSON.stringify(l1));
 
 	let rules: ChangeRule[] = [
 		new ChangeRule('V', 'E', {pre: ['%tk%'], post: ['']}),
@@ -81,12 +81,6 @@ export default function() {
 	} catch (e) {
 		console.error(e)
 	}
-
-	/*l1.saveSync()
-	let langload = Lang.loadSync( 0 );
-	console.log( l1 )
-	console.log('---------')
-	console.log( langload )*/
 	
 
 }

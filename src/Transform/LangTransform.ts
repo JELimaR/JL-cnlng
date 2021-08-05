@@ -17,12 +17,18 @@ export default class LangTransform {
     }
 
     influence(l: Lang, other: ILang): Lang {
-        let out: Lang = l.copy();
+        let out: Lang = new Lang(l.config, l.level+1);
+
+        out.specials = l.specials;
+        out.morphs = l.morphs;
+        out.words = l.words;
+
         for (let k in other.words) {
             // recorrer mejor este set y langlisar palabras?
 			// 
             other.words[k as WordKey].forEach((v) => {
-                out.words[k as WordKey].push(v)
+                if (Math.random() < 0.2)
+                    out.words[k as WordKey].push(v)
             })
         }
         return out;
@@ -80,8 +86,4 @@ interface ILists {
     morphs: IMorphemeLangSets<string>;
     words: IWordLangSets<string>;
 }
-
-export type TransformType = 'Derivate' | 'influence'
-
-export type DerivateOpc = 'ins' | 'del' | 'rep'
 
