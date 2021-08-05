@@ -1,5 +1,5 @@
 
-import Langcontroller from './LangController'
+import Langcontroller from './LangController';
 import { ILang } from './Lang';
 import { IConfig } from './config/LangConfig';
 import { ChangeRule } from './Transform/LangTransformRule';
