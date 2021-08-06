@@ -24,6 +24,6 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "jl-utlts": "^1.1.2"
+    "jl-utlts": "^1.1.3"
   }
 }
