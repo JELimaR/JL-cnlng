@@ -119,6 +119,36 @@ export const wordSchemasCodeMap = (code: WordSchemaCode): WordKey => {
     }
 }
 
+export const WordKey2schemaCode = (wk: WordKey): WordSchemaCode => {
+    switch (wk) {
+        case 'Defaults': return 'D'
+        case 'PersonNeutralNames': return 'P'
+        case 'BoyNames': return 'B'  
+        case 'GirlNames': return 'G'
+        case 'Jobs': return 'J'
+        case 'Civilizatitons': return 'C'
+        case 'Regions': return 'R'
+        case 'FamilyNames': return 'F'
+        case 'FamilyNeutralNames': return 'N'
+        case 'Towns': return 'T'
+        case 'Organizations': return 'O'
+    }
+}
+
+export const MorphKey2schemaCode = (mk: MorphKey): MorphSchemaCode => {
+    // wordsSchemasCode-morphemes
+    switch (mk) {
+        case 'defaults': return 'd' 
+        case 'landOf': return 'l'
+        case 'demonym': return 'y'
+        case 'jobs': return 'j' 
+        case 'sonOf': return 's' 
+        case 'daughterOf': return 'o'
+        case 'bnames': return 'b' 
+        case 'gnames': return 'g' 
+    }
+}
+
 export const morphSchemasCodeMap = (code: MorphSchemaCode): MorphKey => {
     // wordsSchemasCode-morphemes
     switch (code) {
@@ -132,3 +162,29 @@ export const morphSchemasCodeMap = (code: MorphSchemaCode): MorphKey => {
         case 'g': return 'gnames'
     }
 }
+
+// constantes
+export const WordKeyArray: WordKey[] = [
+	'Defaults',
+	'PersonNeutralNames',
+	'BoyNames',
+	'GirlNames',
+	'Jobs',
+	'Civilizatitons',
+	'Regions',
+	'FamilyNames',
+	'FamilyNeutralNames',
+	'Towns',
+	'Organizations'
+]
+
+export const MorphKeyArray: MorphKey[] = [
+	'defaults',
+	'landOf',
+	'demonym',
+	'jobs',
+	'sonOf', 
+	'daughterOf',
+	'bnames', 
+	'gnames',
+]
