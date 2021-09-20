@@ -129,6 +129,60 @@ export const vowssets = {
     'Extra A O U': vowExtraAOU,
 };
 
+//
+//vows
+type TypeVowssetsName = keyof typeof vowssets;
+let vowssetsNameArray: TypeVowssetsName[] = [];
+for (let i in vowssets) {
+    vowssetsNameArray.push(i as TypeVowssetsName);
+}
+//cons
+type TypeConssetsName = keyof typeof conssets;
+let conssetsNameArray: TypeConssetsName[] = [];
+for (let i in conssets) {
+    conssetsNameArray.push(i as TypeConssetsName);
+}
+//ss
+type TypeSsetsName = keyof typeof ssets;
+let ssetsNameArray: TypeSsetsName[] = [];
+for (let i in ssets) {
+    ssetsNameArray.push(i as TypeSsetsName);
+}
+//ls
+type TypeLsetsName = keyof typeof lsets;
+let lsetsNameArray: TypeLsetsName[] = [];
+for (let i in lsets) {
+    lsetsNameArray.push(i as TypeLsetsName);
+}
+//ds
+type TypeDsetsName = keyof typeof dsets;
+let dsetsNameArray: TypeDsetsName[] = [];
+for (let i in dsets) {
+    dsetsNameArray.push(i as TypeDsetsName);
+}
+//fs
+type TypeFsetsName = keyof typeof fsets;
+let fsetsNameArray: TypeFsetsName[] = [];
+for (let i in fsets) {
+    fsetsNameArray.push(i as TypeFsetsName);
+}
+
+export {
+	vowssetsNameArray,
+	TypeVowssetsName,
+	conssetsNameArray,
+	TypeConssetsName,
+	ssetsNameArray,
+	TypeSsetsName,
+	lsetsNameArray,
+	TypeLsetsName,
+	dsetsNameArray,
+	TypeDsetsName,
+	fsetsNameArray,
+	TypeFsetsName
+}
+
+//
 export const defaultPhonemeSets: IPhonemesSets = {
     cons: conssets['Minimal'],
     vows: vowssets['Standard 5'],

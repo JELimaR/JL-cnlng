@@ -70,12 +70,19 @@ const chineseConsOrth: ICorth = {
     'ʤ': 'j', 
 }
 
-export const CorthsList = {
+
+const CorthsList = {
     'default': defaultConsOrth,
     'slavic': slavicConsOrth,
     'german': germanConsOrth,
     'french': frenchConsOrth,
     'chinese': chineseConsOrth
+}
+
+type TypeCorthsName = keyof typeof CorthsList;
+const CorthsListNameArray: TypeCorthsName[] = []
+for (let i in CorthsList) {
+	CorthsListNameArray.push(i as TypeCorthsName);
 }
 
 /* Vowals ortho rules */
@@ -129,7 +136,7 @@ const nodrdicsVowsOrth: IVorth = {
     'U': 'ü'
 }
 
-export const VorthsList = {
+const VorthsList = {
     'default': defaultVowsOrth,
     'acutes': acutesVowsOrth,
     'umlsuts': umlsutsVowsOrth,
@@ -137,6 +144,12 @@ export const VorthsList = {
     'diphthongs': diphthongsVowsOrth,
     'doubles': doublesVowsOrth,
     'nordics': nodrdicsVowsOrth,
+}
+
+type TypeVorthsName = keyof typeof VorthsList
+const VorthsListNameArray: TypeVorthsName[] = []
+for (let i in VorthsList) {
+	VorthsListNameArray.push(i as TypeVorthsName);
 }
 
 /* Combination ortho rules */
@@ -147,4 +160,13 @@ const defaultOrths: IOrths = {
 
 export const OrthsList = {
     'default': defaultOrths
+}
+
+export {
+	TypeCorthsName,
+	CorthsListNameArray,
+	CorthsList,
+	TypeVorthsName,
+	VorthsListNameArray,
+	VorthsList,
 }
